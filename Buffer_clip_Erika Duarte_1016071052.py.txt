@@ -1,0 +1,23 @@
+import arcpy
+from arcpy.sa import*
+
+carpetaEntrada = arcpy.GetParameterAsText(0)
+carpetaSalida = arcpy.GetParameterAsText(1)
+metros = arcpy.GetParameterAsText(2)
+carpetaSalida2 = arcpy.GetParameterAsText(3)
+direccionClip = r"C:\Documentos\CURSOS\PYTHON_SIG\shape_datosValle\rios_BUffer.shp"
+
+#definir espacio actual de trabajo
+arcpy.env.workspace = carpetaEntrada
+
+fc = arcpy.ListFeatureClasses('*')
+
+print(fc)
+
+#iterar cada feature para obtener el resultado de salida
+for i in fc:
+    direccionShape = carpetaEntrada+ "/" +i
+    direccionSalida = carpetaSalida+"/"+ "buffer_"+i
+    arcpy.Buffer_analysis(direccionShape,direccionSalida,metros+" meters")
+    direccionSalida2 = carpetaSalida2+"/"+ "clip_"+i
+    arcpy.analysis.Clip(direccionSalida, direccionClip , direccionSalida2)
